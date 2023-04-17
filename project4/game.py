@@ -36,9 +36,9 @@ class TicTacToe:
         ]
         for combo in winning_combos:
             if combo == ['X', 'X', 'X']:
-                return True
+                return -1
             if combo == ['O', 'O', 'O']:
-                return True
+                return 1
         return False
     
     def check_tie(self):
@@ -78,9 +78,4 @@ class TicTacToe:
                 self.switch_player()
 
     def get_cpu_move(self):
-        pass 
-     
-    
-    
-
-            
+        pass
