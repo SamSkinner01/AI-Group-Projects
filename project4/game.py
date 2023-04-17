@@ -1,5 +1,3 @@
-import random
-
 class TicTacToe:
     def __init__(self):
         self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
@@ -80,9 +78,9 @@ class TicTacToe:
                 self.switch_player()
 
     def get_cpu_move(self):
-        while True:
-            row = random.randint(0, 2)
-            col = random.randint(0, 2)
-            if self.board[row][col] == '-':
-                return row, col
+        pass 
+     
+    
+    
+
             
