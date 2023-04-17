@@ -76,6 +76,81 @@ class TicTacToe:
                     print("Tie!")
                     break
                 self.switch_player()
+        self.print_board()
 
     def get_cpu_move(self):
-        pass
+        value, row, col = self.max(float('-inf'), float('inf'))
+        print(value)
+        return row, col
+    
+    def terminal(self):
+        if self.check_win() or self.check_tie():
+            if self.check_win() == -1:
+                return -10
+            elif self.check_win() == 1:
+                return 10
+            else:
+                return 0
+        else:
+            return False
+    
+    def max(self, alpha, beta):
+        # Checking the terminal states
+        is_terminal = self.terminal()
+        if is_terminal:
+            return is_terminal, None, None
+        
+        # Define value v
+        v = float('-inf')
+        move_row, move_col = None, None
+
+        # For every action possible
+        for row in range(3):
+            for col in range(3):
+                if self.board[row][col] == '-':
+                    # Make move
+                    self.board[row][col] = 'O'
+                    # Get the value of the move
+                    value, _, _ = self.min(alpha, beta)
+                    # Undo the move
+                    self.board[row][col] = '-'
+                    # If the value is greater than v, update v
+                    if value > v:
+                        v, move_row, move_col = value, row, col
+                    alpha = max(alpha, v)
+                    if v >= beta:
+                        print(v)
+                        return v, move_row, move_col
+        return v, move_row, move_col
+
+    
+
+    def min(self, alpha, beta):
+        # Checking the terminal states
+        is_terminal = self.terminal()
+        if is_terminal:
+            return is_terminal, None, None
+        
+        # Define value v
+        v = float('inf')
+        move_row, move_col = None, None
+
+        # For every action possible
+        for row in range(3):
+            for col in range(3):
+                if self.board[row][col] == '-':
+                    # Make move
+                    self.board[row][col] = 'O'
+
+                    # Get the value of the move
+                    value, _, _ = self.min(alpha, beta)
+                    # Undo the move
+                    self.board[row][col] = '-'
+                    # If the value is greater than v, update v
+                    if value < v:
+                        v, move_row, move_col = value, row, col
+                    beta = max(beta, v)
+                    if v <= alpha:
+                        #print(v)
+                        return v, move_row, move_col
+        return v, move_row, move_col
