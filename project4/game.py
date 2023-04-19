@@ -63,16 +63,19 @@ class TicTacToe:
 
         for condition in win_conditions:
             if condition[0] == condition[1] == condition[2] != '-':
-                return 1 if condition[0] == 'X' else -1
+                return -1 if condition[0] == 'X' else 1
         
         # Check if there is a tie
+        ct = 0
         for row in  board:
             for col in row:
                 if col == '-':
-                    return 0
+                    ct += 1
+        if ct == 0:
+            return 0
         
         # Not terminal state
-        return False
+        return -2
     
     def play(self):
         """
@@ -86,28 +89,25 @@ class TicTacToe:
             row, col = self.get_users_move()
             
             # Update the board
-            self.board[row][col] = self.current_player
+            self.board[row][col] = 'X'
+
+            #self.print_board(self.board)
             
             # Check if the game is over
-            if self.is_game_over(self.board):
+            if self.is_game_over(self.board) == 1 or self.is_game_over(self.board) == -1 or self.is_game_over(self.board) == 0:
                 self.print_board(self.board)
                 print('Game over')
                 break
             
-            # Switch players
-            self.current_player = 'X' if self.current_player == 'O' else 'O'
             
             # Get the computers move
             row, col = self.get_computers_move()
             
             # Update the board
-            self.board[row][col] = self.current_player
+            self.board[row][col] = 'O'
             
             # Check if the game is over
-            if self.is_game_over(self.board):
+            if self.is_game_over(self.board) == 1 or self.is_game_over(self.board) == -1 or self.is_game_over(self.board) == 0:
                 self.print_board(self.board)
                 print('Game over')
                 break
-            
-            # Switch players
-            self.current_player = 'X' if self.current_player == 'O' else 'O'

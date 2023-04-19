@@ -1,5 +1,8 @@
+import copy
+
 class Minimax:
     def __init__(self, board, current_player):
+        # Initialize the current state, passed in as a parameter in the game
         self.board = board
         self.current_player = current_player
 
@@ -28,10 +31,13 @@ class Minimax:
                 return -1 if condition[0] == 'X' else 1
         
         # Check if there is a tie
+        ct = 0
         for row in  board:
             for col in row:
                 if col == '-':
-                    return -2
+                    ct += 1
+        if ct == 0:
+            return 0
         
         # Not terminal state
         return -2
@@ -41,59 +47,57 @@ class Minimax:
         Returns the best move for the current player
         """
         value, row, col = self.max(self.board, float('-inf'), float('inf'))
-        print(value, row, col)
         return row, col
-    
+        
     def max(self, board, alpha, beta):
         # Check terminal state
         if self.is_game_over(board) <= 1 and self.is_game_over(board) >= -1:
             return self.is_game_over(board), None, None
-        
+
         v = float('-inf')
 
         move_row = None
         move_col = None
-    
+
         for row in range(3):
             for col in range(3):
+                
                 if board[row][col] == '-':
-                    board[row][col] = 'X'
-                    value, _, _ = self.min(board, alpha, beta)
-                    board[row][col] = '-'
-                    if value > v:
-                        v = value
+                    send_board = copy.deepcopy(board)
+                    send_board[row][col] = 'O'
+                    v2, r, c = self.min(send_board, alpha, beta)
+                    del send_board
+                    if v2 > v:
+                        v = v2
                         move_row = row
                         move_col = col
-                    alpha = max(alpha, v)
-                    if v >= alpha:
-                        return v, move_row, move_col
-                    
+                        alpha = max(alpha, v)
+                    if v >= beta:
+                        break  # Remove the return statement and break out of the loop
         return v, move_row, move_col
-    
+
     def min(self, board, alpha, beta):
         # Check terminal state
         if self.is_game_over(board) <= 1 and self.is_game_over(board) >= -1:
             return self.is_game_over(board), None, None
-        
+
         v = float('inf')
-        
+
         move_row = None
         move_col = None
 
         for row in range(3):
             for col in range(3):
                 if board[row][col] == '-':
-                    board[row][col] = 'O'
-                    value, _, _ = self.max(board, alpha, beta)
-                    board[row][col] = '-'
-                    if value < v:
-                        v = value
+                    send_board = copy.deepcopy(board)
+                    send_board[row][col] = 'X'
+                    v2, r2, c2 = self.max(send_board, alpha, beta)
+                    del send_board
+                    if v2 < v:
+                        v = v2
                         move_row = row
                         move_col = col
-                    beta = min(beta, v)
-                    if v <= beta:
-                        return v, move_row, move_col
+                        beta = min(beta, v)
+                    if v <= alpha:
+                        break  # Remove the return statement and break out of the loop
         return v, move_row, move_col
-        
-    
-    
