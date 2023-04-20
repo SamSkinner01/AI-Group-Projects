@@ -73,7 +73,7 @@ class Minimax:
                         move_col = col
                         alpha = max(alpha, v)
                     if v >= beta:
-                        break  # Remove the return statement and break out of the loop
+                        return v, move_row, move_col
         return v, move_row, move_col
 
     def min(self, board, alpha, beta):
@@ -99,5 +99,5 @@ class Minimax:
                         move_col = col
                         beta = min(beta, v)
                     if v <= alpha:
-                        break  # Remove the return statement and break out of the loop
+                        return v, move_row, move_col
         return v, move_row, move_col
